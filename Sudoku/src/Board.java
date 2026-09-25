@@ -3,6 +3,7 @@ public class Board
 	{
 		static String [][] board = new String[9][9];
 		static int [][] revealedBoard = new int[9][9];
+		static int num;
 		public static void fillBoard()
 			{
 				
@@ -10,8 +11,8 @@ public class Board
 					{	
 						for(int col = 0; col < 9; col++)
 							{
-								int randomNumber = (int)(Math.random()*9 + 1);
-								revealedBoard[row][col] = randomNumber;
+								int num = (int)(Math.random()*9 + 1);
+								revealedBoard[row][col] = num;
 							}
 					}
 				for(int row = 0; row < 9; row ++)
@@ -33,14 +34,20 @@ public class Board
 			}
 		private static boolean isValid() 
 			{
-	        for (int i = 0; i < 9; i++) 
-	        	{
-	            // Check row and column
-	            if (revealedBoard[row][i] == num || revealedBoard[i][col] == num) 
-	            	{
-	                return false;
-	            	}
-	        }
+				for(int row = 0; row < 9; row ++)
+					{	
+						for(int col = 0; col < 9; col++)
+							{
+								 for (int i = 0; i < 9; i++) 
+							        	{
+							            if (revealedBoard[row][i] == num || revealedBoard[i][col] == num) 
+							            	{
+							                return false;
+							            	}
+							        }
+							}
+					}
+	       return true;
 		}
 		public static void displayNumberBoard()
 		{
