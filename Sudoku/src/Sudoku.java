@@ -1,0 +1,11 @@
+
+public class Sudoku
+	{		
+		public static void main(String[] args)
+			{
+				Board.fillBoard();
+				Board.displayNumberBoard();
+				Board.displayNumberBoard();
+			}
+
+	}
