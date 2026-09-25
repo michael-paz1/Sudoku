@@ -5,14 +5,23 @@ public class Board
 		static int [][] revealedBoard = new int[9][9];
 		public static void fillBoard()
 			{
+				
+				for(int row = 0; row < 9; row ++)
+					{	
+						for(int col = 0; col < 9; col++)
+							{
+								int randomNumber = (int)(Math.random()*9 + 1);
+								revealedBoard[row][col] = randomNumber;
+							}
+					}
 				for(int row = 0; row < 9; row ++)
 					{
 						for(int col = 0; col < 9; col++)
 							{
-								if(board[row][col] != null && board[row][col] != "  ")
+								if(board[row][col] != null && board[row][col].trim().isEmpty())
 									{
 										String revealedCell = Integer.toString(revealedBoard[row][col]);
-										board[row][col] = revealedCell;
+										board[row][col] = " " + revealedCell + " ";
 									}
 								else
 									{
@@ -20,20 +29,24 @@ public class Board
 									}
 							}
 					}
-				int randomNumber = (int)(Math.random()+ 1 * 9);
-				for(int row = 0; row < 9; row ++)
-					{
-						for(int col = 0; col < 9; col++)
-							{
-								revealedBoard[row][col] = randomNumber;
-							}
-					}
+				
 			}
+		private static boolean isValid() 
+			{
+	        for (int i = 0; i < 9; i++) 
+	        	{
+	            // Check row and column
+	            if (revealedBoard[row][i] == num || revealedBoard[i][col] == num) 
+	            	{
+	                return false;
+	            	}
+	        }
+		}
 		public static void displayNumberBoard()
 		{
 			System.out.println("  A  B  C  D  E  F  G  H  I ");
 			System.out.println(" ---------------------------");
-			System.out.println("1 " + board[0][0] + "|" + board[0][1] + "|" + board[0][2] + "|" + board[0][3] + "|" + board[0][4] + "|" + board[0][5] + "|" + board[0][6] + "|" + board[0][7] + "|" + board[0][8]);
+			System.out.println("1 " + revealedBoard[0][0] + "|" + revealedBoard[0][1] + "|" + revealedBoard[0][2] + "|" + board[0][3] + "|" + board[0][4] + "|" + board[0][5] + "|" + board[0][6] + "|" + board[0][7] + "|" + board[0][8]);
 			System.out.println(" ---------------------------");
 			System.out.println("2 " + board[1][0] + "|" + board[1][1] + "|" + board[1][2] + "|" + board[1][3] + "|" + board[1][4] + "|" + board[1][5] + "|" + board[1][6] + "|" + board[1][7] + "|" + board[1][8]);
 			System.out.println(" ---------------------------");

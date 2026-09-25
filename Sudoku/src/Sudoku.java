@@ -5,7 +5,6 @@ public class Sudoku
 			{
 				Board.fillBoard();
 				Board.displayNumberBoard();
-				Board.displayNumberBoard();
 			}
 
 	}
