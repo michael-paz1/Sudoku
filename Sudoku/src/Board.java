@@ -1,75 +1,167 @@
-
+import java.util.*;
 public class Board
 	{
-		static String [][] board = new String[9][9];
-		static int [][] revealedBoard = new int[9][9];
-		static int num;
-		public static void fillBoard()
+		static int [][] board = new int[9][9];
+		static int [][] solution = new int[9][9];
+		static boolean [][] starter = new boolean[9][9];
+		
+		static boolean fillBoard(int[][] grid) 
 			{
-				
-				for(int row = 0; row < 9; row ++)
-					{	
-						for(int col = 0; col < 9; col++)
-							{
-								int num = (int)(Math.random()*9 + 1);
-								revealedBoard[row][col] = num;
-							}
-					}
-				for(int row = 0; row < 9; row ++)
-					{
-						for(int col = 0; col < 9; col++)
-							{
-								if(board[row][col] != null && board[row][col].trim().isEmpty())
-									{
-										String revealedCell = Integer.toString(revealedBoard[row][col]);
-										board[row][col] = " " + revealedCell + " ";
-									}
-								else
-									{
-								board[row][col] = "  ";
-									}
-							}
-					}
-				
+		    for (int row = 0; row < 9; row++) 
+		    	{
+		        for (int col = 0; col < 9; col++) 
+		        	{
+		            if (grid[row][col] == 0) 
+		            	{
+		                List<Integer> nums = new ArrayList<>();
+		                for (int numbers = 1; numbers <= 9; numbers++) nums.add(numbers);
+		                Collections.shuffle(nums);
+		                for (int number : nums) 
+		                	{
+		                    if (isValid(grid, row, col, number)) 
+		                    	{
+		                        grid[row][col] = number;
+		                        if (fillBoard(grid)) 
+		                        	{
+		                        	return true;
+		                        	}
+		                        grid[row][col] = 0;
+		                    	}
+		                	}
+		                return false;
+		            	}
+		        	}
+		    	}
+		    return true;
 			}
-		private static boolean isValid() 
+		public static void createPuzzle(int cellsToRemove)
 			{
-				for(int row = 0; row < 9; row ++)
-					{	
-						for(int col = 0; col < 9; col++)
-							{
-								 for (int i = 0; i < 9; i++) 
-							        	{
-							            if (revealedBoard[row][i] == num || revealedBoard[i][col] == num) 
-							            	{
-							                return false;
-							            	}
-							        }
-							}
+				for (int row = 0; row < 9; row++)
+				{
+					for (int column = 0; column < 9; column++)
+					{
+						solution[row][column] = 0;
 					}
-	       return true;
+				}
+				fillBoard(solution);
+		 
+				for (int row = 0; row < 9; row++)
+				{
+					for (int column = 0; column < 9; column++)
+					{
+						board[row][column] = solution[row][column];
+					}
+				}
+		 
+				int cellsRemoved = 0;
+				while (cellsRemoved < cellsToRemove)
+				{
+					int row = (int)(Math.random() * 9);
+					int column = (int)(Math.random() * 9);
+					if (board[row][column] != 0)
+					{
+						board[row][column] = 0;
+						cellsRemoved++;
+					}
+				}
+		 
+				for (int row = 0; row < 9; row++)
+				{
+					for (int column = 0; column < 9; column++)
+					{
+						starter[row][column] = board[row][column] != 0;
+					}
+				}
+			}
+		public static boolean placeNumber(int row, int column, int value)
+			{
+				if (starter[row][column])
+				{
+					System.out.println("That cell is a starting clue and cannot be changed.");
+					return false;
+				}
+				if (value == 0)
+				{
+					board[row][column] = 0;
+					return true;
+				}
+				if (!isValid(board, row, column, value))
+				{
+					System.out.println("Illegal move: that number is already in the row, column, or box.");
+					return false;
+				}
+				board[row][column] = value;
+				return true;
+			}
+		static boolean isValid(int[][] grid, int row, int col, int value) 
+			{
+		    for (int i = 0; i < 9; i++) 
+		    	{
+		        if (i != col && grid[row][i] == value)
+		        	{
+		        	return false;
+		        	}
+		        if (i != row && grid[i][col] == value)
+		        	{
+		        	return false;
+		        	}
+		    	}
+		    int r0 = row / 3 * 3, c0 = col / 3 * 3;
+		    for (int row1 = r0; row1 < r0 + 3; row1++)
+		    	
+		        for (int col1 = c0; col1 < c0 + 3; col1++) 
+		        	{
+		            if ((row1 != row || col1 != col) && grid[row1][col1] == value)
+		            	{
+		            	return false;
+		            	}
+			}
+		    return true;
 		}
 		public static void displayNumberBoard()
-		{
-			System.out.println("  A  B  C  D  E  F  G  H  I ");
-			System.out.println(" ---------------------------");
-			System.out.println("1 " + revealedBoard[0][0] + "|" + revealedBoard[0][1] + "|" + revealedBoard[0][2] + "|" + board[0][3] + "|" + board[0][4] + "|" + board[0][5] + "|" + board[0][6] + "|" + board[0][7] + "|" + board[0][8]);
-			System.out.println(" ---------------------------");
-			System.out.println("2 " + board[1][0] + "|" + board[1][1] + "|" + board[1][2] + "|" + board[1][3] + "|" + board[1][4] + "|" + board[1][5] + "|" + board[1][6] + "|" + board[1][7] + "|" + board[1][8]);
-			System.out.println(" ---------------------------");
-			System.out.println("3 " + board[2][0] + "|" + board[2][1] + "|" + board[2][2] + "|" + board[2][3] + "|" + board[2][4] + "|" + board[2][5] + "|" + board[2][6] + "|" + board[2][7] + "|" + board[2][8]);
-			System.out.println(" ---------------------------");
-			System.out.println("4 " + board[3][0] + "|" + board[3][1] + "|" + board[3][2] + "|" + board[3][3] + "|" + board[3][4] + "|" + board[3][5] + "|" + board[3][6] + "|" + board[3][7] + "|" + board[3][8]);
-			System.out.println(" ---------------------------");
-			System.out.println("5 " + board[4][0] + "|" + board[4][1] + "|" + board[4][2] + "|" + board[4][3] + "|" + board[4][4] + "|" + board[4][5] + "|" + board[4][6] + "|" + board[4][7] + "|" + board[4][8]);
-			System.out.println(" ---------------------------");
-			System.out.println("6 " + board[5][0] + "|" + board[5][1] + "|" + board[5][2] + "|" + board[5][3] + "|" + board[5][4] + "|" + board[5][5] + "|" + board[5][6] + "|" + board[5][7] + "|" + board[5][8]);
-			System.out.println(" ---------------------------");
-			System.out.println("7 " + board[6][0] + "|" + board[6][1] + "|" + board[6][2] + "|" + board[6][3] + "|" + board[6][4] + "|" + board[6][5] + "|" + board[6][6] + "|" + board[6][7] + "|" + board[6][8]);
-			System.out.println(" ---------------------------");
-			System.out.println("8 " + board[7][0] + "|" + board[7][1] + "|" + board[7][2] + "|" + board[7][3] + "|" + board[7][4] + "|" + board[7][5] + "|" + board[7][6] + "|" + board[7][7] + "|" + board[7][8]);
-			System.out.println(" ---------------------------");
-			System.out.println("9 " + board[8][0] + "|" + board[8][1] + "|" + board[8][2] + "|" + board[8][3] + "|" + board[8][4] + "|" + board[8][5] + "|" + board[8][6] + "|" + board[8][7] + "|" + board[8][8]);
-		}
+			{
+				System.out.println();
+				System.out.println("    A B C   D E F   G H I");
+				System.out.println("  +-------+-------+-------+");
+				for (int row = 0; row < 9; row++)
+				{
+					String line = (row + 1) + " | ";
+					for (int column = 0; column < 9; column++)
+					{
+						if (board[row][column] == 0)
+						{
+							line += ". ";
+						}
+						else
+						{
+							line += board[row][column] + " ";
+						}
+						if (column % 3 == 2)
+						{
+							line += "| ";
+						}
+					}
+					System.out.println(line);
+					if (row % 3 == 2)
+					{
+						System.out.println("  +-------+-------+-------+");
+					}
+				}
+				System.out.println();
+			}
+		public static boolean isSolved()
+			{
+				for (int row = 0; row < 9; row++)
+				{
+					for (int column = 0; column < 9; column++)
+					{
+						if (board[row][column] == 0 || !isValid(board, row, column, board[row][column]))
+						{
+							return false;
+						}
+					}
+				}
+				return true;
+			}
 	
 	}
