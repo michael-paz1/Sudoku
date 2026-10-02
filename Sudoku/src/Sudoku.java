@@ -5,6 +5,7 @@ public class Sudoku
 
 			public static void main(String[] args)
 			{
+				System.out.println("Hello welcome to Sudoku!");
 				Scanner userDifficulty = new Scanner(System.in);
 				System.out.println("Select your difficulty");
 				System.out.println("1. Easy      2. Medium      3. Hard      4. Impossible");
@@ -50,16 +51,16 @@ public class Sudoku
 						return;
 					}
 
-					String[] parts = input.split(" ");
-					if (parts.length != 2 || parts[0].length() != 2 || parts[1].length() != 1)
+					String[] answer = input.split(" ");
+					if (answer.length != 2 || answer[0].length() != 2 || answer[1].length() != 1)
 					{
 						System.out.println("Use the format: B3 7");
 						continue;
 					}
 
-					char columnLetter = parts[0].charAt(0);
-					char rowDigit = parts[0].charAt(1);
-					char valueDigit = parts[1].charAt(0);
+					char columnLetter = answer[0].charAt(0);
+					char rowDigit = answer[0].charAt(1);
+					char valueDigit = answer[1].charAt(0);
 
 					if (columnLetter < 'A' || columnLetter > 'I' || rowDigit < '1' || rowDigit > '9'
 							|| valueDigit < '0' || valueDigit > '9')
